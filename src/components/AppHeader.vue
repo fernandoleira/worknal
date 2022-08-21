@@ -1,5 +1,5 @@
 <template>
-    <header>
+    <header class="p-2">
         <nav class="navbar">
             <div class="container-fluid">
                 <a href="/">worknal</a>
@@ -22,20 +22,24 @@ export default {
 
 <style>
 nav {
-    padding: 5px 5px;
-    border-bottom: 2px solid #888;
+    margin: 0px auto;
+    width: 98%;
+    border-bottom: 2px solid #222;
 }
 
 nav a {
-    color: black;
+    color: #222;
     text-decoration: none;
     font-size: 1.45em;
-    font-family: 'Open Sans', sans-serif;
     font-weight: bold;
 }
 
 nav a:hover {
-    color: black;
-    opacity: 0.6;
+    color: #fff;
+    opacity: 0.8;
+}
+
+nav img {
+    border: 2px solid #222;
 }
 </style>

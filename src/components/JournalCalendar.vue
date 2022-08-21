@@ -1,5 +1,5 @@
 <template>
-    <div id="calendar" class="panel border">
+    <div id="calendar" class="panel">
         <v-calendar is-expanded :attributes='attrs' />
     </div>
 </template>

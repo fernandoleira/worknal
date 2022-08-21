@@ -1,8 +1,6 @@
 <template>
-    <footer>
-      <div class="container-fluid">
-        <span>Made with &#128293; by Fern</span>
-      </div>
+    <footer class="p-2">
+      <p>Made with &#128293; by Fern</p>
     </footer>
 </template>
 
@@ -14,7 +12,13 @@ export default {
 
 <style>
 footer {
-  padding: 15px 0px;
-  border-top: 2px solid #888;
+  font-weight: bold;
+  font-size: 0.85em;
 }
+
+footer p {
+  padding: 0px;
+  line-height: 5px;
+}
+
 </style>

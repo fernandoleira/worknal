@@ -1,14 +1,14 @@
 <template>
-    <main>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="helper col-lg-4">
-                    <div class="vstack gap-3">
+    <main class="p-3 flex-fill">
+        <div class="container-fluid h-100">
+            <div class="row h-100">
+                <div class="helper p-2 col-lg-4">
+                    <div class="vstack gap-3 h-100">
                         <JournalCalendar />
                         <JournalGoals />
                     </div>
                 </div>
-                <div class="entries col-lg-8">
+                <div class="entries p-2 col-lg-8">
                     <JournalPage />
                 </div>
             </div>
@@ -32,21 +32,12 @@ export default {
 </script>
 
 <style>
-main {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    background-color: orange;
-}
-
 .panel {
-    position: relative;
-    padding: 25px;
+    padding: 15px;
     background-color: white;
+    border: 2px solid #222;
     border-radius: 15px;
     box-shadow: 2px 2px 8px #555;
-}
-
-.goals {
-    height: 100%;
+    color: #222;
 }
 </style>

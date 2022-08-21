@@ -24,6 +24,12 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   text-align: center;
+  background-color: #85c1e9 ;
+  font-family: 'Open Sans', sans-serif;
+  color: #222;
 }
 </style>
