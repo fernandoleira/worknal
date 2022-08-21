@@ -5,9 +5,15 @@
 </template>
 
 <script>
-import AppHeader from './components/AppHeader.vue'
-import AppMain from './components/AppMain.vue'
-import AppFooter from './components/AppFooter.vue'
+import { db } from './firebase';
+
+import AppHeader from './components/AppHeader.vue';
+import AppMain from './components/AppMain.vue';
+import AppFooter from './components/AppFooter.vue';
+import { FirebaseError } from '@firebase/util';
+
+// TODO
+const documentPath = 'contacts/jeff';
 
 export default {
   name: 'App',

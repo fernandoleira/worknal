@@ -1,6 +1,6 @@
 <template>
     <div id="goals" class="panel h-100">
-        <h3>Goals of the Day</h3>
+        <h3>Goals</h3>
         <div class="list-group">
             <label class="list-group-item" v-for="(goal, inx) in goals" :key="inx">
                 <input class="form-check-input flex-shrink-0" type="checkbox" v-model="goal.active" :id="inx" />
@@ -45,7 +45,12 @@ export default {
 </script>
 
 <style>
+#goals h3 {
+    text-align: left;
+}
+
 .list-group {
+    margin-top: 20px;
     text-align: left;
 }
 
