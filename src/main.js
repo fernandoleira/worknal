@@ -1,4 +1,13 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
+import VCalendar from 'v-calendar'
+import 'v-calendar/dist/style.css'
+
 import App from './App.vue'
 
-createApp(App).mount('#app')
+
+// Create the Vue app
+createApp(App)
+.use(VCalendar, {
+    componentPrefix: 'v',
+})
+.mount('#app')
