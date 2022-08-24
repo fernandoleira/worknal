@@ -3,7 +3,7 @@
         <h3>Goals</h3>
         <div class="list-group">
             <label class="list-group-item" v-for="(goal, inx) in goals" :key="inx">
-                <input class="form-check-input flex-shrink-0" type="checkbox" v-model="goal.active" :id="inx" />
+                <input class="form-check-input flex-shrink-0" type="checkbox" v-model="goal.completed" :id="inx" />
                 <span>{{ goal.title }}</span>
             </label>
         </div>
@@ -12,27 +12,23 @@
 </template>
 
 <script>
+import { db } from '../firebase';
+import { collection, getDocs } from 'firebase/firestore/lite';
+
 export default {
     name: 'JournalGoals',
     data() {
         return {
-            goals: [
-                {
-                    title: 'Goal #0',
-                    active: false,
-                },
-                {
-                    title: 'Goal #1',
-                    active: true,
-                },
-                {
-                    title: 'Goal #2',
-                    active: false,
-                },
-            ],
+            state: 'loading',
+            goals: [],
         }
     },
     methods: {
+        async getGoals() {
+            const goalsCol = collection(db, 'users/fernandoleira/goals');
+            const goalsSnaps = await getDocs(goalsCol);
+            this.goals = goalsSnaps.docs.map(doc => doc.data());
+        },
         newGoal() {
             const new_goal = {
                 title: `Goal #${this.goals.length}`,
@@ -40,6 +36,9 @@ export default {
             };
             this.goals.push(new_goal);
         }
+    },
+    beforeMount() {
+        this.getGoals();
     }
 }
 </script>

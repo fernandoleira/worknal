@@ -1,7 +1,7 @@
 <template>
     <div id="page" class="panel">
         <h2>{{ page_date }}</h2>
-        <JournalEntry v-for="(entry, inx) in entries" :key="inx" :tm="entry.tm" :entry-text="entry.entryText" :id="inx" />
+        <JournalEntry v-for="(entry, inx) in entries" :key="inx" :tm="entry.tm" :entry-text="entry.text" :id="inx" />
         <div class="entry new-entry" :class="{ firstEntry: !this.entries.length }">
             <div class="entry-nav d-flex justify-content-between">
                 <span>{{ current_time }}</span>
@@ -15,6 +15,9 @@
 </template>
 
 <script>
+import { db } from '../firebase';
+import { collection, getDocs } from 'firebase/firestore/lite';
+
 import JournalEntry from './JournalEntry.vue';
 
 export default {
@@ -26,20 +29,16 @@ export default {
         return {
             page_date: new Date().toDateString(),
             current_time: this.getCurrentEntryTime(),
-            entries: [
-                {
-                    tm: "03:00 AM",
-                    entryText: "This is a test"
-                },
-                {
-                    tm: "07:21 AM",
-                    entryText: "This is also a test"
-                },
-            ],
+            entries: [],
             textarea_hidden: true,
         }
     },
     methods: {
+        async getEntries() {
+            const entriesCol = collection(db, '/users/fernandoleira/pages/23082022/entries');
+            const entriesSnaps = await getDocs(entriesCol);
+            this.entries = entriesSnaps.docs.map(doc => doc.data());
+        },
         getCurrentEntryTime() {
             const date = new Date();
             let hrzero = date.getHours() % 12 < 10 ? '0' : '';
@@ -52,6 +51,7 @@ export default {
         setInterval(() => {
             this.current_time = this.getCurrentEntryTime();
         }, 1000)
+        this.getEntries()
     },
 }
 </script>

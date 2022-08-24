@@ -5,15 +5,9 @@
 </template>
 
 <script>
-import { db } from './firebase';
-
 import AppHeader from './components/AppHeader.vue';
 import AppMain from './components/AppMain.vue';
 import AppFooter from './components/AppFooter.vue';
-import { FirebaseError } from '@firebase/util';
-
-// TODO
-const documentPath = 'contacts/jeff';
 
 export default {
   name: 'App',
@@ -21,7 +15,7 @@ export default {
     AppHeader,
     AppMain,
     AppFooter,
-  }
+  },
 }
 </script>
 
@@ -34,7 +28,7 @@ export default {
   width: 100%;
   height: 100%;
   text-align: center;
-  background-color: #85c1e9 ;
+  background-color: #effeff;
   font-family: 'Open Sans', sans-serif;
   color: #222;
 }
