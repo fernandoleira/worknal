@@ -24,7 +24,6 @@ export default {
 nav {
     margin: 0px auto;
     width: 98%;
-    border-bottom: 2px solid #222;
 }
 
 nav a {

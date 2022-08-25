@@ -35,7 +35,6 @@ export default {
 .panel {
     padding: 15px;
     background-color: white;
-    border: 2px solid #222;
     border-radius: 15px;
     box-shadow: 2px 2px 8px #555;
     color: #222;
