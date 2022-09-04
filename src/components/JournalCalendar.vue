@@ -12,7 +12,9 @@ export default {
             attrs: [
                 {
                     key: 'today',
-                    highlight: true,
+                    highlight: {
+                        contentClass: 'highlight-today'
+                    },
                     dates: new Date(),
                 },
             ],
@@ -22,4 +24,20 @@ export default {
 </script>
 
 <style>
+.vc-container {
+    border: none;
+}
+
+.highlight-today {
+    color: #fff;
+    font-weight: bold;
+    background-color: #28b463;
+}
+
+.highlight-today:hover {
+    opacity: 0.8;
+    color: #fff;
+    font-weight: bold;
+    background-color: #28b463;
+}
 </style>

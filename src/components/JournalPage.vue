@@ -6,7 +6,8 @@
             <div class="entry-nav d-flex justify-content-between">
                 <span>{{ current_time }}</span>
                 <button class="btn" @click="textarea_hidden = !textarea_hidden">
-                    {{ textarea_hidden ? '+' : 'x' }}
+                    <i class="fa fa-plus" v-if="textarea_hidden"></i>
+                    <i class="fa fa-times" v-else></i>
                 </button>
             </div>
             <textarea :hidden="textarea_hidden"></textarea>
@@ -41,7 +42,7 @@ export default {
         },
         getCurrentEntryTime() {
             const date = new Date();
-            let hrzero = date.getHours() % 12 < 10 ? '0' : '';
+            let hrzero = date.getHours() != 12 && date.getHours() % 12 < 10 ? '0' : '';
             let minzero = date.getMinutes() < 10 ? '0' : '';
             let ampm = date.getHours() > 12 ? 'PM' : 'AM';
             return `${hrzero}${date.getHours() % 12}:${minzero}${date.getMinutes()} ${ampm}`;
@@ -100,8 +101,7 @@ export default {
     padding: 0px 12px;
     font-size: 1.5em;
     color: #222;
-    border: 2px solid #222;
-    border-radius: 100%;
+    border: none;
 }
 
 .new-entry textarea {
