@@ -1,23 +1,23 @@
 <template>
     <div id="page" class="panel">
-        <h2>{{ page_date }}</h2>
+        <h2>{{ pageDate }}</h2>
         <JournalEntry v-for="(entry, inx) in entries" :key="inx" :tm="entry.tm" :entry-text="entry.text" :id="inx" />
         <div class="entry new-entry" :class="{ firstEntry: !this.entries.length }">
             <div class="entry-nav d-flex justify-content-between">
-                <span>{{ current_time }}</span>
-                <button class="btn" @click="textarea_hidden = !textarea_hidden">
-                    <i class="fa fa-plus" v-if="textarea_hidden"></i>
+                <span>{{ currentTime }}</span>
+                <button class="btn" @click="textareaHidden = !textareaHidden">
+                    <i class="fa fa-plus" v-if="textareaHidden"></i>
                     <i class="fa fa-times" v-else></i>
                 </button>
             </div>
-            <textarea :hidden="textarea_hidden"></textarea>
+            <textarea v-model="newEntryText" :hidden="textareaHidden" @focusout="createEntry()"></textarea>
         </div>
     </div>
 </template>
 
 <script>
 import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore/lite';
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore/lite';
 
 import JournalEntry from './JournalEntry.vue';
 
@@ -28,15 +28,17 @@ export default {
     },
     data() {
         return {
-            page_date: new Date().toDateString(),
-            current_time: this.getCurrentEntryTime(),
+            pageDate: new Date().toDateString(),
+            currentTime: this.getCurrentEntryTime(),
             entries: [],
-            textarea_hidden: true,
+            textareaHidden: true,
+            newEntryText: "",
         }
     },
     methods: {
-        async getEntries() {
-            const entriesCol = collection(db, '/users/fernandoleira/pages/23082022/entries');
+        async getEntries(date=NaN) {
+            if (!date) date = new Date();
+            const entriesCol = collection(db, `/users/fernandoleira/pages/${date.toLocaleDateString('en-Gb').replaceAll('/', '')}/entries`);
             const entriesSnaps = await getDocs(entriesCol);
             this.entries = entriesSnaps.docs.map(doc => doc.data());
         },
@@ -47,12 +49,27 @@ export default {
             let ampm = date.getHours() > 12 ? 'PM' : 'AM';
             return `${hrzero}${date.getHours() % 12}:${minzero}${date.getMinutes()} ${ampm}`;
         },
+        async createEntry() {
+            try {
+                const newEntry = {
+                    text: this.newEntryText,
+                    tm: this.getCurrentEntryTime(),
+                };
+                await setDoc(doc(db, 'users/fernandoleira/pages/23082022/entries', this.getCurrentEntryTime().replace(':', '').replace(' ', '-')), newEntry);
+                this.entries.push(newEntry);
+            } catch (err) {
+                console.log("There has been an error: ", err);
+            }
+
+            this.newEntryText = '';
+            this.textareaHidden = true;
+        },
     },
     created() {
         setInterval(() => {
-            this.current_time = this.getCurrentEntryTime();
+            this.currentTime = this.getCurrentEntryTime();
         }, 1000)
-        this.getEntries()
+        this.getEntries(new Date(2022, 7, 23))
     },
 }
 </script>
@@ -60,35 +77,6 @@ export default {
 <style>
 #page {
     height: 100%;
-}
-
-.entry {
-    padding: 10px 20px;
-    width: 100%;
-    border-top: 2px solid #888;
-}
-
-.entry-nav {
-    width: 100%;
-}
-
-.entry-nav span {
-    display: flex;
-    align-items: center;
-    font-size: 1.8em;
-}
-
-.entry-nav button {
-    padding: 0px 12px;
-    font-size: 1em;
-    color: #222;
-    border: 2px solid #222;
-}
-
-.entry p {
-    margin-top: 10px;
-    width: 100%;
-    text-align: left;
 }
 
 .new-entry {

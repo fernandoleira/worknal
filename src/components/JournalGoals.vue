@@ -3,29 +3,32 @@
         <h3>Goals</h3>
         <div class="input-group" v-for="(goal, inx) in goals" :key="inx">
             <div class="input-group-text">
-                <input class="form-check-input mt-0" type="checkbox" v-model="goal.data.completed" :id="inx" />
+                <input class="form-check-input mt-0" type="checkbox" v-model="goal.data.completed" :id="inx"
+                    @change="toggleGoalCompleted(goal.id, inx)" />
             </div>
             <span class="input-group-text col" v-if="goal.data.completed"><s>{{ goal.data.title }}</s></span>
             <span class="input-group-text col" v-else>{{ goal.data.title }}</span>
             <button class="btn btn-outline-secondary dropdown" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false"><i class="fa fa-ellipsis-h"></i></button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item">Edit</a></li>
-                <li><a class="dropdown-item" @click="deleteGoal(goal.id, inx)">Delete</a></li>
+                <li><a class="dropdown-item"><i class="fa fa-pencil" aria-hidden="true"></i>
+                        Edit</a></li>
+                <li><a class="dropdown-item" @click="deleteGoal(goal.id, inx)"><i class="fa fa-trash"
+                            aria-hidden="true"></i> Delete</a></li>
             </ul>
         </div>
         <div class="input-group new-goal-group">
             <input type="text" v-model="newGoalTitle" class="form-control" placeholder="New Goal" aria-label="New Goal"
                 aria-describedby="new-goal-button" />
-            <button class="btn btn-outline-primary" type="button" id="new-goal-button" :disabled="!newGoalTitle"
-                @click="createGoal()">Create</button>
+            <button class="btn" :class="newGoalTitle ? 'btn-primary' : 'btn-outline-primary'" type="button"
+                id="new-goal-button" :disabled="!newGoalTitle" @click="createGoal()">Create</button>
         </div>
     </div>
 </template>
 
 <script>
 import { db } from '../firebase';
-import { collection, doc, getDocs, addDoc, deleteDoc } from 'firebase/firestore/lite';
+import { collection, doc, getDocs, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
 
 export default {
     name: 'JournalGoals',
@@ -75,7 +78,17 @@ export default {
             } catch (err) {
                 console.log("There has been an error: ", err);
             }
-        }  
+        },
+        // Modify the completed state in the database when checkmark is active/inactive in the GUI
+        async toggleGoalCompleted(goal_id, inx) {
+            try {
+                await updateDoc(doc(db, 'users/fernandoleira/goals/', goal_id), {
+                    completed: this.goals[inx].data.completed,
+                });
+            } catch (err) {
+                console.log("There has been an error: ", err);
+            }
+        },
     },
     created() {
         this.getGoals();
