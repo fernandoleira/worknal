@@ -1,7 +1,8 @@
 <template>
     <div id="page" class="panel">
         <h2>{{ pageDate }}</h2>
-        <JournalEntry v-for="(entry, inx) in entries" :key="inx" :tm="entry.tm" :entry-text="entry.text" :id="inx" />
+        <JournalEntry v-for="(entry, inx) in entries" :key="inx" :tm="entry.data.tm" :entry-text="entry.data.text"
+            :id="inx" />
         <div class="entry new-entry" :class="{ firstEntry: !this.entries.length }">
             <div class="entry-nav d-flex justify-content-between">
                 <span>{{ currentTime }}</span>
@@ -17,7 +18,7 @@
 
 <script>
 import { db } from '../firebase';
-import { collection, doc, getDocs, setDoc } from 'firebase/firestore/lite';
+import { collection, doc, getDocs, setDoc, deleteDoc } from 'firebase/firestore/lite';
 
 import JournalEntry from './JournalEntry.vue';
 
@@ -28,7 +29,7 @@ export default {
     },
     data() {
         return {
-            pageDate: new Date().toDateString(),
+            pageDate: new Date().toLocaleDateString('en-US', { month: 'long', weekday: 'long', day: 'numeric', year: 'numeric' }),
             currentTime: this.getCurrentEntryTime(),
             entries: [],
             textareaHidden: true,
@@ -36,11 +37,26 @@ export default {
         }
     },
     methods: {
-        async getEntries(date=NaN) {
+        async getEntries(date = NaN) {
             if (!date) date = new Date();
             const entriesCol = collection(db, `/users/fernandoleira/pages/${date.toLocaleDateString('en-Gb').replaceAll('/', '')}/entries`);
             const entriesSnaps = await getDocs(entriesCol);
-            this.entries = entriesSnaps.docs.map(doc => doc.data());
+            this.entries = entriesSnaps.docs.map(doc => {
+                return {
+                    id: doc.id,
+                    data: doc.data()
+                }
+            });
+        },
+        async getDebugEntries() {
+            const entriesCol = collection(db, `/users/fernandoleira/pages/debug/entries`);
+            const entriesSnaps = await getDocs(entriesCol);
+            this.entries = this.entries.concat(entriesSnaps.docs.map(doc => {
+                return {
+                    id: doc.id,
+                    data: doc.data()
+                }
+            }));
         },
         getCurrentEntryTime() {
             const date = new Date();
@@ -64,12 +80,21 @@ export default {
             this.newEntryText = '';
             this.textareaHidden = true;
         },
+        async deleteEntry(entry_id, inx) {
+            try {
+                await deleteDoc(doc(db, 'users/fernandoleira/pages/23082022/entries', entry_id));
+                this.entries.splice(inx, 1)
+            } catch (err) {
+                console.log("There has been an error: ", err);
+            }
+        }
     },
     created() {
         setInterval(() => {
             this.currentTime = this.getCurrentEntryTime();
-        }, 1000)
-        this.getEntries(new Date(2022, 7, 23))
+        }, 1000);
+        this.getEntries(new Date(2022, 7, 23));
+        if (process.env.VUE_APP_DEBUG) this.getDebugEntries();
     },
 }
 </script>
