@@ -2,7 +2,7 @@
     <div class="entry" :class="{firstEntry: !id}">
         <div class="entry-nav d-flex justify-content-between">
             <span>{{ tm }}</span>
-            <button class="btn">
+            <button class="btn" @click="this.$emit('entry-delete-clicked')">
                 Delete
             </button>
         </div>
@@ -28,7 +28,7 @@ export default {
 .entry {
     padding: 10px 20px;
     width: 100%;
-    border-top: 2px solid #888;
+    border-top: 2px solid #aaa;
 }
 
 .entry-nav {
