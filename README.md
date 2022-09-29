@@ -1,6 +1,8 @@
 # Worknal
 
-## Project Commands
+Web app to keep track of important daily entries and goals.
+
+## Getting Started
 
 ```
 // Project setup
@@ -19,3 +21,11 @@ npm run lint
 ## Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Contact
+
+**Fernando Leira Cortel** - [fernandoleira](https://github.com/fernandoleira)
