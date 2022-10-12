@@ -12,6 +12,7 @@
     "core-js": "^3.8.3",
     "debounce": "^1.2.1",
     "firebase": "^9.9.3",
+    "mitt": "^3.0.0",
     "v-calendar": "^3.0.0-alpha.8",
     "vue": "^3.2.13",
     "vuefire": "^2.2.5"

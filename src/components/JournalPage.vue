@@ -59,7 +59,6 @@ export default {
                     data: doc.data()
                 }
             });
-            if (process.env.VUE_APP_DEBUG) this.getDebugEntries();
         },
         async getDebugEntries() {
             const entriesCol = collection(db, `/users/fernandoleira/pages/debug/entries`);
@@ -88,6 +87,11 @@ export default {
             this.newEntryText = '';
             this.textareaHidden = true;
         },
+        updateEntries(date, hasEntries) {
+            this.currentDate = new Date(date);
+            this.entries = [];
+            if (hasEntries) this.getEntries(this.currentDate);
+        },
         async deleteEntry(entry_id, inx) {
             try {
                 await deleteDoc(doc(db, `users/fernandoleira/pages/${this.getCurrentDateIdFormat()}/entries`, entry_id));
@@ -102,7 +106,11 @@ export default {
             this.currentTime = this.getCurrentEntryTime();
         }, 1000);
         this.getEntries();
+        if (process.env.VUE_APP_DEBUG) this.getDebugEntries();
     },
+    mounted() {
+        this.emitter.on('new-date-selected', res => this.updateEntries(res.date, res.hasEntries));
+    }
 }
 </script>
 

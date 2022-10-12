@@ -1,6 +1,7 @@
 <template>
     <div id="calendar" class="panel">
-        <v-calendar is-expanded :attributes='attrs' />
+        <v-date-picker is-expanded v-model="selectedDate" :attributes='attrs'  
+        :select-attribute="selectedAttr" />
     </div>
 </template>
 
@@ -11,11 +12,24 @@ import { collection, getDocs } from 'firebase/firestore/lite';
 export default {
     name: 'JournalCalendar',
     data() {
-        return {
-            todayDate: new Date(),
-            attrs: [
+        let tmp = new Date()
 
-            ],
+        return {
+            todayDate: tmp,
+            selectedDate: tmp,
+            attrs: [{
+                key: 'today',
+                highlight: {
+                    contentClass: 'highlight-today',
+                },
+                dates: tmp,
+            }],
+            selectedAttr: {
+                highlight: {
+                    contentClass: 'highlight-active',
+                },
+            },
+            datesWithEntries: new Map()
         }
     },
     methods: {
@@ -30,32 +44,39 @@ export default {
         },
     },
     mounted() {
-        this.attrs.push({
-            key: 'today',
-            highlight: {
-                contentClass: 'highlight-today'
-            },
-            dates: this.todayDate,
-        });
         this.getPageDates().then(value => {
             value.forEach(date => {
-                if (date.toDateString()  !== this.todayDate.toDateString() )
+                // Add date into datesWithEntries object so it can be use
+                // later to check if there are entries with this date.
+                this.datesWithEntries.set(date.toDateString(), true);
+
+                if (date.toDateString() !== this.todayDate.toDateString()) {
+                    // Push a new style attribute for this date
                     this.attrs.push(
                         {
                             dot: {
                                 style: {
-                                    backgroundColor: "#28b463",
+                                    backgroundColor: '#28b463',
                                 }
                             },
                             dates: date,
                         }
                     )
+                }
             })
         })
-            .catch(err => {
-                console.log(err);
-            });
+        .catch(err => {
+            console.log("There has been an error: ", err);
+        });
     },
+    watch: {
+        selectedDate (date) {
+            this.emitter.emit('new-date-selected', {
+                date: date, 
+                hasEntries: this.datesWithEntries.has(date.toDateString())
+            });
+        }
+    }
 }
 </script>
 
@@ -65,13 +86,25 @@ export default {
 }
 
 .highlight-today {
+    color: #28b463;
+    font-weight: bold;
+    border: 2px solid #28b463;
+}
+
+.highlight-today:hover {
+    opacity: 0.8;
+    color: #28b463;
+    font-weight: bold;
+    border: 2px solid #28b463;
+}
+
+.highlight-active {
     color: #fff;
     font-weight: bold;
     background-color: #28b463;
 }
 
-.highlight-today:hover {
-    opacity: 0.8;
+.highlight-active:focus {
     color: #fff;
     font-weight: bold;
     background-color: #28b463;

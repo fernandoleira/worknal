@@ -18,9 +18,6 @@ export default {
         tm: String,
         entryText: String
     },
-    methods: {
-        
-    }
 }
 </script>
 

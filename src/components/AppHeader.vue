@@ -14,9 +14,6 @@
 <script>
 export default {
   name: 'AppHeader',
-  mounted() {
-    console.log("Header has been mounted!");
-  }
 }
 </script>
 
