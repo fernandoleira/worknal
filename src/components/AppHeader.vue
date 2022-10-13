@@ -26,12 +26,13 @@ nav {
 nav a {
     color: #222;
     text-decoration: none;
-    font-size: 1.45em;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5em;
     font-weight: bold;
 }
 
 nav a:hover {
-    color: #fff;
+    color: #222;
     opacity: 0.8;
 }
 

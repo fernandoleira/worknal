@@ -1,15 +1,15 @@
 <template>
     <div id="page" class="panel">
-        <h2>{{ currentDate.toLocaleDateString('en-US', { month: 'long', weekday: 'long', day: 'numeric', year: 'numeric'
-        }) }}</h2>
+        <h3>{{ currentDate.toLocaleDateString('en-US', { month: 'long', weekday: 'long', day: 'numeric', year: 'numeric'
+        }) }}</h3>
         <JournalEntry v-for="(entry, inx) in entries" :key="inx" :tm="entry.data.tm" :entry-text="entry.data.text"
             :id="inx" @entry-delete-clicked="deleteEntry(entry.id, inx)" />
         <div class="entry new-entry" :class="{ firstEntry: !this.entries.length }">
             <div class="entry-nav d-flex justify-content-between">
                 <span>{{ currentTime }}</span>
                 <button class="btn" @click="textareaHidden = !textareaHidden">
-                    <i class="fa fa-plus" v-if="textareaHidden"></i>
-                    <i class="fa fa-times" v-else></i>
+                    <i class="fa fa-plus" aria-hidden="true" v-if="textareaHidden"></i>
+                    <i class="fa fa-times" aria-hidden="true" v-else></i>
                 </button>
             </div>
             <textarea v-model="newEntryText" :hidden="textareaHidden" @focusout="createEntry()"></textarea>
@@ -124,13 +124,14 @@ export default {
     padding: 10px 20px;
     width: 100%;
     border-top: 2px solid #aaa;
+    color: rgba(2, 2, 2, 0.6)
 }
 
 .new-entry button {
     padding: 0px 12px;
-    font-size: 1.5em;
-    color: #222;
+    font-size: 1.25em;
     border: none;
+    opacity: 0.6;
 }
 
 .new-entry textarea {

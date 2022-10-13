@@ -11,13 +11,11 @@ export default {
 </script>
 
 <style>
-footer {
+footer p {
   font-weight: bold;
   font-size: 0.85em;
-}
-
-footer p {
-  padding: 0px;
+  font-family: 'Open Sans', sans-serif;
+  padding: 0px 0px 5px;
   line-height: 5px;
 }
 

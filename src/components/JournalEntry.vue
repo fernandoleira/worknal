@@ -1,12 +1,16 @@
 <template>
     <div class="entry" :class="{firstEntry: !id}">
         <div class="entry-nav d-flex justify-content-between">
-            <span>{{ tm }}</span>
+            <div>
+                <span>{{ tm }}</span>
+                <p>{{ entryText }}</p>
+            </div>
+            
             <button class="btn" @click="this.$emit('entry-delete-clicked')">
-                Delete
+                <i class="fa fa-trash"></i>
             </button>
         </div>
-        <p>{{ entryText }}</p>
+        
     </div>
 </template>
 
@@ -40,9 +44,13 @@ export default {
 
 .entry-nav button {
     padding: 0px 12px;
-    font-size: 1em;
     color: #222;
-    border: 2px solid #222;
+    font-size: 1.25em;
+    border: none;
+}
+
+.entry-nav button:hover {
+    opacity: 0.8;
 }
 
 .entry p {
