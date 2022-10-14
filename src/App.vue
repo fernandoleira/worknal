@@ -22,8 +22,8 @@ export default {
 <style>
 h3 {
   margin-top: 5px;
-  font-family: 'Fredoka One', cursive;
   color: #222;
+  font-weight: bold;
 }
 
 #app {

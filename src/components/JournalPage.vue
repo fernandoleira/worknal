@@ -123,13 +123,21 @@ export default {
 .new-entry {
     padding: 10px 20px;
     width: 100%;
-    border-top: 2px solid #aaa;
     color: rgba(2, 2, 2, 0.6)
 }
 
 .new-entry button {
     padding: 0px 12px;
     font-size: 1.25em;
+    color: rgba(2, 2, 2, 0.6);
+    border: none;
+    opacity: 0.6;
+}
+
+.new-entry button:hover {
+    padding: 0px 12px;
+    font-size: 1.25em;
+    color: rgba(2, 2, 2, 0.8);
     border: none;
     opacity: 0.6;
 }
@@ -137,9 +145,5 @@ export default {
 .new-entry textarea {
     margin-top: 10px;
     width: 100%;
-}
-
-.firstEntry {
-    border: 0px;
 }
 </style>

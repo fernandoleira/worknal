@@ -2,9 +2,9 @@
     <header class="p-2">
         <nav class="navbar">
             <div class="container-fluid">
-                <a href="/">worknal</a>
+                <a href="/"><img class="logo" src="img/logo.png" alt="worknal" /></a>
                 <div class="dropdown text-end">
-                    <img class="rounded-circle" src="../assets/img/avatar.png" alt="user" width="32" height="32" />
+                    <img class="rounded-circle" src="../assets/img/avatar.png" alt="user" />
                 </div>
             </div>
         </nav>
@@ -20,23 +20,20 @@ export default {
 <style>
 nav {
     margin: 0px auto;
-    width: 98%;
-}
-
-nav a {
-    color: #222;
-    text-decoration: none;
-    font-family: 'Fredoka One', cursive;
-    font-size: 1.5em;
-    font-weight: bold;
+    width: 100%;
 }
 
 nav a:hover {
-    color: #222;
     opacity: 0.8;
 }
 
-nav img {
-    border: 2px solid #222;
+nav .logo {
+    height: 40px;
+}
+
+nav .rounded-circle {
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgb(33, 146, 255);
 }
 </style>

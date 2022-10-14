@@ -29,7 +29,6 @@ export default {
 .entry {
     padding: 10px 20px;
     width: 100%;
-    border-top: 2px solid #aaa;
 }
 
 .entry-nav {
@@ -44,13 +43,13 @@ export default {
 
 .entry-nav button {
     padding: 0px 12px;
-    color: #222;
+    color: rgba(2, 2, 2, 0.8);
     font-size: 1.25em;
     border: none;
 }
 
 .entry-nav button:hover {
-    opacity: 0.8;
+    color: rgba(2, 2, 2, 1);
 }
 
 .entry p {
