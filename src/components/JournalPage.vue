@@ -53,12 +53,12 @@ export default {
             this.entries.length = 0;
             const entriesCol = collection(db, `/users/fernandoleira/pages/${date.toLocaleDateString('en-Gb').replaceAll('/', '')}/entries`);
             const entriesSnaps = await getDocs(entriesCol);
-            this.entries = entriesSnaps.docs.map(doc => {
+            this.entries = this.entries.concat(entriesSnaps.docs.map(doc => {
                 return {
                     id: doc.id,
                     data: doc.data()
                 }
-            });
+            }));
         },
         async getDebugEntries() {
             const entriesCol = collection(db, `/users/fernandoleira/pages/debug/entries`);

@@ -38,9 +38,9 @@ export default {
 
 .panel {
     padding: 15px;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border-radius: 5px;
     box-shadow: 0px 0px 0px 2px rgba(40, 180, 100, 0.5), 0px 0px 0px 2px rgba(40, 180, 100, 0.5);
-    color: #222;
+    color: rgb(2, 2, 2);
 }
 </style>

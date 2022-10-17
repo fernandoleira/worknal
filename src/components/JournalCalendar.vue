@@ -86,27 +86,27 @@ export default {
 }
 
 .highlight-today {
-    color: #28b463;
+    color: rgb(40, 180, 100);
     font-weight: bold;
-    border: 2px solid #28b463;
+    border: 2px solid rgb(40, 180, 100);
 }
 
 .highlight-today:hover {
     opacity: 0.8;
-    color: #28b463;
+    color: rgb(40, 180, 100);
     font-weight: bold;
-    border: 2px solid #28b463;
+    border: 2px solid rgb(40, 180, 100);
 }
 
 .highlight-active {
-    color: #fff;
+    color: rgb(255, 255, 255);
     font-weight: bold;
-    background-color: #28b463;
+    background-color: rgb(40, 180, 100);
 }
 
 .highlight-active:focus {
-    color: #fff;
+    color: rgb(255, 255, 255);
     font-weight: bold;
-    background-color: #28b463;
+    background-color: rgb(40, 180, 100);
 }
 </style>

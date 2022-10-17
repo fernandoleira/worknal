@@ -1,0 +1,22 @@
+# local env files
+local/
+.env.local
+.env.*.local
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Node.js files
+node_modules
+npm-debug.log
+
+# Project docs and editor config files
+README.md
+LICENSE
+.vscode

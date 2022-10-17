@@ -108,8 +108,8 @@ export default {
 }
 
 #goals .form-check-input:checked {
-    background-color: #28b463;
-    border-color: #28b463;
+    background-color: rgb(40, 180, 100);
+    border-color: rgb(40, 180, 100);
 }
 
 #goals .form-check-input:focus {
@@ -117,17 +117,17 @@ export default {
 }
 
 #goals .btn-outline-secondary {
-    background-color: #fff;
+    background-color: rgb(255, 255, 255);
     border: 0px;
 }
 
 #goals .btn:hover {
-    color: #222;
+    color: rgb(2, 2, 2);
 }
 
 #goals .btn:focus {
     border: 0px;
-    color: #222;
+    color: rgb(2, 2, 2);
     box-shadow: none;
 }
 

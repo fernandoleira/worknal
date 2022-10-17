@@ -34,6 +34,6 @@ nav .logo {
 nav .rounded-circle {
     width: 40px;
     height: 40px;
-    border: 2px solid rgb(33, 146, 255);
+    border: 2px solid rgb(40, 180, 100);
 }
 </style>
