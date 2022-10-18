@@ -4,16 +4,7 @@
         }) }}</h3>
         <JournalEntry v-for="(entry, inx) in entries" :key="inx" :tm="entry.data.tm" :entry-text="entry.data.text"
             :id="inx" @entry-delete-clicked="deleteEntry(entry.id, inx)" />
-        <div class="entry new-entry" :class="{ firstEntry: !this.entries.length }">
-            <div class="entry-nav d-flex justify-content-between">
-                <span>{{ currentTime }}</span>
-                <button class="btn" @click="textareaHidden = !textareaHidden">
-                    <i class="fa fa-plus" aria-hidden="true" v-if="textareaHidden"></i>
-                    <i class="fa fa-times" aria-hidden="true" v-else></i>
-                </button>
-            </div>
-            <textarea v-model="newEntryText" :hidden="textareaHidden" @focusout="createEntry()"></textarea>
-        </div>
+        <JournalNewEntry :current-time="currentTime" @new-entry="newEntry => createEntry(newEntry)" />
     </div>
 </template>
 
@@ -22,19 +13,19 @@ import { db } from '../firebase';
 import { collection, doc, getDocs, setDoc, deleteDoc } from 'firebase/firestore/lite';
 
 import JournalEntry from './JournalEntry.vue';
+import JournalNewEntry from './JournalNewEntry.vue';
 
 export default {
     name: 'JournalPage',
     components: {
         JournalEntry,
+        JournalNewEntry
     },
     data() {
         return {
             currentDate: new Date(),
             currentTime: this.getCurrentEntryTime(),
             entries: [],
-            textareaHidden: true,
-            newEntryText: "",
         }
     },
     methods: {
@@ -70,22 +61,15 @@ export default {
                 }
             }));
         },
-        async createEntry() {
+        async createEntry(newEntryData) {
             try {
-                const newEntryData = {
-                    text: this.newEntryText,
-                    tm: this.getCurrentEntryTime(),
-                };
                 await setDoc(doc(db, `users/fernandoleira/pages/${this.getCurrentDateIdFormat()}`), {});
                 await setDoc(doc(db, `users/fernandoleira/pages/${this.getCurrentDateIdFormat()}/entries`, 
-                    this.getCurrentEntryTime().replace(':', '').replace(' ', '-')), newEntryData);
+                    newEntryData.tm.replace(':', '').replace(' ', '-')), newEntryData);
                 this.entries.push({id: this.getCurrentDateIdFormat(), data: newEntryData});
             } catch (err) {
                 console.log("There has been an error: ", err);
             }
-
-            this.newEntryText = '';
-            this.textareaHidden = true;
         },
         updateEntries(date, hasEntries) {
             this.currentDate = new Date(date);
@@ -118,32 +102,5 @@ export default {
 #page {
     height: 100%;
     overflow: auto;
-}
-
-.new-entry {
-    padding: 10px 20px;
-    width: 100%;
-    color: rgba(2, 2, 2, 0.6)
-}
-
-.new-entry button {
-    padding: 0px 12px;
-    font-size: 1.25em;
-    color: rgba(2, 2, 2, 0.6);
-    border: none;
-    opacity: 0.6;
-}
-
-.new-entry button:hover {
-    padding: 0px 12px;
-    font-size: 1.25em;
-    color: rgba(2, 2, 2, 0.8);
-    border: none;
-    opacity: 0.6;
-}
-
-.new-entry textarea {
-    margin-top: 10px;
-    width: 100%;
 }
 </style>
