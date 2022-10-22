@@ -9,7 +9,9 @@
                     </div>
                 </div>
                 <div class="entries p-2 col-lg-8">
-                    <JournalPage />
+                    <Transition name="page">
+                        <JournalPage v-if="showPage" />
+                    </Transition>
                 </div>
             </div>
         </div>
@@ -22,12 +24,17 @@ import JournalGoals from './JournalGoals.vue';
 import JournalPage from './JournalPage.vue';
 
 export default {
-  name: 'AppMain',
-  components: {
-    JournalCalendar,
-    JournalGoals,
-    JournalPage,
-  }
+    name: 'AppMain',
+    components: {
+        JournalCalendar,
+        JournalGoals,
+        JournalPage,
+    },
+    data() {
+        return {
+            showPage: true
+        }
+    }
 }
 </script>
 
@@ -43,4 +50,10 @@ export default {
     box-shadow: 0px 0px 0px 2px rgba(40, 180, 100, 0.5), 0px 0px 0px 2px rgba(40, 180, 100, 0.5);
     color: rgb(2, 2, 2);
 }
+
+.page-enter-active {}
+.page-leave-active {}
+
+.page-enter-from {}
+.page-leave-to {}
 </style>
