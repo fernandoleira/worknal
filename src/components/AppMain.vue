@@ -5,7 +5,7 @@
                 <div class="helper p-2 col-lg-4">
                     <div class="vstack gap-3 h-100">
                         <JournalCalendar />
-                        <JournalGoals />
+                        <JournalGoalList />
                     </div>
                 </div>
                 <div class="entries p-2 col-lg-8">
@@ -20,14 +20,14 @@
 
 <script>
 import JournalCalendar from './JournalCalendar.vue';
-import JournalGoals from './JournalGoals.vue';
+import JournalGoalList from './JournalGoalList.vue';
 import JournalPage from './JournalPage.vue';
 
 export default {
     name: 'AppMain',
     components: {
         JournalCalendar,
-        JournalGoals,
+        JournalGoalList,
         JournalPage,
     },
     data() {
@@ -51,6 +51,7 @@ export default {
     color: rgb(2, 2, 2);
 }
 
+/* TODO */
 .page-enter-active {}
 .page-leave-active {}
 
