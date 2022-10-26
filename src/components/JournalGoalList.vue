@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { db } from '../firebase';
+import { db } from '../plugins/firebase';
 import { collection, doc, getDocs, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
 
 import JournalGoal from './JournalGoal.vue';
@@ -20,12 +20,6 @@ export default {
     components: {
         JournalNewGoal,
         JournalGoal
-    },
-    data() {
-        return {
-            goals: [],
-            newGoalTitle: '',
-        }
     },
     methods: {
         // Read all the goals stored in firestore for the user
@@ -71,6 +65,11 @@ export default {
                 console.log("There has been an error: ", err);
             }
         },
+    },
+    data() {
+        return {
+            goals: []
+        }
     },
     created() {
         this.getGoals();

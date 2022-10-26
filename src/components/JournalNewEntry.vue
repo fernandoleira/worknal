@@ -17,12 +17,6 @@ export default {
     props: {
         currentTime: String
     },
-    data() {
-        return {
-            textareaHidden: true,
-            newEntryText: "",
-        }
-    },
     methods: {
         triggerNewEntry() {
             if (this.newEntryText !== '') {
@@ -30,6 +24,12 @@ export default {
                 this.newEntryText = '';
             }
             this.textareaHidden = true;
+        }
+    },
+    data() {
+        return {
+            textareaHidden: true,
+            newEntryText: ''
         }
     }
 }

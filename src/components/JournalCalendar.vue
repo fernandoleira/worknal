@@ -6,11 +6,30 @@
 </template>
 
 <script>
-import { db } from '../firebase';
+import { db } from '../plugins/firebase';
 import { collection, getDocs } from 'firebase/firestore/lite';
 
 export default {
     name: 'JournalCalendar',
+    methods: {
+        async getPageDates() {
+            const pageRef = collection(db, '/users/fernandoleira/pages');
+            const pageSnaps = await getDocs(pageRef);
+            return pageSnaps.docs.map(doc => {
+                if (doc.id !== "debug") {
+                    return new Date(doc.id.substring(2, 4) + '/' + doc.id.substring(0, 2) + '/' + doc.id.substring(4, 8));
+                }
+            }).filter(doc => doc !== undefined);
+        },
+    },
+    watch: {
+        selectedDate(date) {
+            this.emitter.emit('new-date-selected', {
+                date: date, 
+                hasEntries: this.datesWithEntries.has(date.toDateString())
+            });
+        }
+    },
     data() {
         let tmp = new Date()
 
@@ -32,18 +51,7 @@ export default {
             datesWithEntries: new Map()
         }
     },
-    methods: {
-        async getPageDates() {
-            const pageRef = collection(db, '/users/fernandoleira/pages');
-            const pageSnaps = await getDocs(pageRef);
-            return pageSnaps.docs.map(doc => {
-                if (doc.id !== "debug") {
-                    return new Date(doc.id.substring(2, 4) + '/' + doc.id.substring(0, 2) + '/' + doc.id.substring(4, 8));
-                }
-            }).filter(doc => doc !== undefined);
-        },
-    },
-    mounted() {
+    created() {
         this.getPageDates().then(value => {
             value.forEach(date => {
                 // Add date into datesWithEntries object so it can be use
@@ -68,14 +76,6 @@ export default {
         .catch(err => {
             console.log("There has been an error: ", err);
         });
-    },
-    watch: {
-        selectedDate (date) {
-            this.emitter.emit('new-date-selected', {
-                date: date, 
-                hasEntries: this.datesWithEntries.has(date.toDateString())
-            });
-        }
     }
 }
 </script>

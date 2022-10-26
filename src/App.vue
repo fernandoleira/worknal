@@ -1,17 +1,17 @@
 <template>
   <AppHeader />
-  <AppMain />
+  <AppJournal />
 </template>
 
 <script>
 import AppHeader from './components/AppHeader.vue';
-import AppMain from './components/AppMain.vue';
+import AppJournal from './components/AppJournal.vue';
 
 export default {
   name: 'App',
   components: {
     AppHeader,
-    AppMain,
+    AppJournal,
   },
 }
 </script>

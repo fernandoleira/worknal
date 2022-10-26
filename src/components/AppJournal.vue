@@ -9,8 +9,8 @@
                     </div>
                 </div>
                 <div class="entries p-2 col-lg-8">
-                    <Transition name="page">
-                        <JournalPage v-if="showPage" />
+                    <Transition name="page" @after-leave="this.emitter.emit('page-hidden');">
+                        <JournalPage v-show="pageShown" />
                     </Transition>
                 </div>
             </div>
@@ -24,7 +24,7 @@ import JournalGoalList from './JournalGoalList.vue';
 import JournalPage from './JournalPage.vue';
 
 export default {
-    name: 'AppMain',
+    name: 'AppJournal',
     components: {
         JournalCalendar,
         JournalGoalList,
@@ -32,8 +32,16 @@ export default {
     },
     data() {
         return {
-            showPage: true
+            pageShown: true
         }
+    },
+    mounted() {
+        this.emitter.on('hide-page', () => {
+            this.pageShown = false;
+        });
+        this.emitter.on('date-changed', () => {
+            this.pageShown = true;
+        });
     }
 }
 </script>
@@ -51,10 +59,35 @@ export default {
     color: rgb(2, 2, 2);
 }
 
-/* TODO */
-.page-enter-active {}
-.page-leave-active {}
+.page-enter-active {
+    animation: enter-from-left 0.2s;
+}
 
-.page-enter-from {}
-.page-leave-to {}
+.page-leave-active {
+    animation: leave-to-right 0.2s;
+}
+
+@keyframes enter-from-left {
+    0% {
+        transform: translateX(-25px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes leave-to-right {
+    0% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(25px);
+        opacity: 0;
+    }
+}
 </style>
