@@ -37,31 +37,39 @@ export default {
         },
         async getEntries(date = NaN) {
             if (!date) date = new Date();
-            const entriesCol = collection(db, `/users/fernandoleira/pages/${date.toLocaleDateString('en-Gb').replaceAll('/', '')}/entries`);
-            const entriesSnaps = await getDocs(entriesCol);
-            this.entries = entriesSnaps.docs.map(doc => {
-                return {
-                    id: doc.id,
-                    data: doc.data()
-                }
-            });
+            try {
+                const entriesDocs = await getDocs(collection(db, `/users/fernandoleira/pages/${date.toLocaleDateString('en-Gb').replaceAll('/', '')}/entries`));
+                const entriesVals = entriesDocs.docs.map(doc => {
+                    return {
+                        id: doc.id,
+                        data: doc.data()
+                    }
+                });
+                return entriesVals;
+            } catch (err) {
+                console.log('There was an error: ', err);
+            }
         },
         async getDebugEntries() {
-            const entriesCol = collection(db, `/users/fernandoleira/pages/debug/entries`);
-            const entriesSnaps = await getDocs(entriesCol);
-            this.entries = this.entries.concat(entriesSnaps.docs.map(doc => {
-                return {
-                    id: doc.id,
-                    data: doc.data()
-                }
-            }));
+            try {
+                const debugEntriesDocs = await getDocs(collection(db, `/users/fernandoleira/pages/debug/entries`));
+                const debugEntriesVals = debugEntriesDocs.docs.map(doc => {
+                    return {
+                        id: doc.id,
+                        data: doc.data()
+                    }
+                });
+                return debugEntriesVals;
+            } catch (err) {
+                console.log('There was an error: ', err);
+            }
         },
         async createEntry(newEntryData) {
             try {
                 await setDoc(doc(db, `users/fernandoleira/pages/${this.getCurrentDateIdFormat()}`), {});
-                await setDoc(doc(db, `users/fernandoleira/pages/${this.getCurrentDateIdFormat()}/entries`, 
+                await setDoc(doc(db, `users/fernandoleira/pages/${this.getCurrentDateIdFormat()}/entries`,
                     newEntryData.tm.replace(':', '').replace(' ', '-')), newEntryData);
-                this.entries.push({id: this.getCurrentDateIdFormat(), data: newEntryData});
+                this.entries.push({ id: this.getCurrentDateIdFormat(), data: newEntryData });
             } catch (err) {
                 console.log("There has been an error: ", err);
             }
@@ -69,11 +77,11 @@ export default {
         async updateEntry(entryId, entryData, inx) {
             try {
                 await updateDoc(
-                    doc(db, `users/fernandoleira/pages/${this.getCurrentDateIdFormat()}/entries`, entryId), 
+                    doc(db, `users/fernandoleira/pages/${this.getCurrentDateIdFormat()}/entries`, entryId),
                     entryData
                 );
                 this.entries[inx].data = entryData;
-            } catch(err) {
+            } catch (err) {
                 console.log("There has been an error: ", err);
             }
         },
@@ -86,45 +94,33 @@ export default {
             }
         }
     },
-    watch: {
-        currentDate(date) {
-            this.getEntries(date)
-        }
-    },
     data() {
         return {
             currentDate: new Date(),
             currentTime: this.getCurrentEntryTime(),
             entries: [],
-            hasEntries: false
+            lastTransition: {}
         }
     },
-    created() {
+    async created() {
         setInterval(() => {
             this.currentTime = this.getCurrentEntryTime();
         }, 1000);
-        this.getEntries();
+
+        this.entries = await this.getEntries();
         if (process.env.VUE_APP_DEBUG) {
-            this.getDebugEntries();
-        }
-        if (this.entries.length > 0) {
-            this.hasEntries = true;
+            this.entries = this.entries.concat(await this.getDebugEntries());
         }
     },
     mounted() {
-        this.emitter.on('new-date-selected', e => {
-            this.currentDate = e.date;
-            this.hasEntries = e.hasEntries;
+        this.emitter.on('new-date-selected', async e => {
             this.emitter.emit('hide-page', e.date < this.currentDate);
-        });
-        this.emitter.on('page-hidden', () => {
-            if (this.hasEntries) {
-                this.getEntries(this.currentDate);
-            } else {
-                this.entries = [];
+            this.currentDate = e.date;
+            this.entries = [];
+            if (e.hasEntries) {
+                this.entries = await this.getEntries(this.currentDate);
             }
-            this.emitter.emit('date-changed');
-        })
+        });
     }
 }
 </script>

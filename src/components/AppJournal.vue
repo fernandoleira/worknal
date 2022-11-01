@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="entries p-2 col-lg-8">
-                    <Transition name="page" @after-leave="this.emitter.emit('page-hidden');">
+                    <Transition name="page" @after-leave="this.pageShown = true">
                         <JournalPage v-show="pageShown" />
                     </Transition>
                 </div>
@@ -32,15 +32,15 @@ export default {
     },
     data() {
         return {
-            pageShown: true
+            pageShown: true,
+            transitionRight: false
         }
     },
     mounted() {
-        this.emitter.on('hide-page', () => {
+        this.emitter.on('hide-page', isRight => {
             this.pageShown = false;
-        });
-        this.emitter.on('date-changed', () => {
-            this.pageShown = true;
+            this.transitionRight = isRight;
+            this.emitter.emit('page-hidden');
         });
     }
 }
