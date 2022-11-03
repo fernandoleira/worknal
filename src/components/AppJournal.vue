@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="entries p-2 col-lg-8">
-                    <Transition name="page" @after-leave="this.pageShown = true">
+                    <Transition :name="this.transitionName" @after-leave="this.pageShown = true">
                         <JournalPage v-show="pageShown" />
                     </Transition>
                 </div>
@@ -32,15 +32,18 @@ export default {
     },
     data() {
         return {
+            transitionName: "enter-left",
             pageShown: true,
-            transitionRight: false
         }
     },
     mounted() {
         this.emitter.on('hide-page', isRight => {
+            if (isRight) {
+                this.transitionName = "enter-right";
+            } else {
+                this.transitionName = "enter-left";
+            }
             this.pageShown = false;
-            this.transitionRight = isRight;
-            this.emitter.emit('page-hidden');
         });
     }
 }
@@ -59,17 +62,37 @@ export default {
     color: rgb(2, 2, 2);
 }
 
-.page-enter-active {
+.enter-left-enter-active {
     animation: enter-from-left 0.2s;
 }
 
-.page-leave-active {
+.enter-left-leave-active {
     animation: leave-to-right 0.2s;
+}
+
+.enter-right-enter-active {
+    animation: enter-from-right 0.2s;
+}
+
+.enter-right-leave-active {
+    animation: leave-to-left 0.2s;
 }
 
 @keyframes enter-from-left {
     0% {
         transform: translateX(-25px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes enter-from-right {
+    0% {
+        transform: translateX(25px);
         opacity: 0;
     }
 
@@ -87,6 +110,18 @@ export default {
 
     100% {
         transform: translateX(25px);
+        opacity: 0;
+    }
+}
+
+@keyframes leave-to-left {
+    0% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-25px);
         opacity: 0;
     }
 }

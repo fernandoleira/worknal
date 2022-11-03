@@ -114,7 +114,7 @@ export default {
     },
     mounted() {
         this.emitter.on('new-date-selected', async e => {
-            this.emitter.emit('hide-page', e.date < this.currentDate);
+            this.emitter.emit('hide-page', e.date > this.currentDate);
             this.currentDate = e.date;
             this.entries = [];
             if (e.hasEntries) {

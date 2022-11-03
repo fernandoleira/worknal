@@ -29,7 +29,25 @@ export default {
     margin-top: 15px;
 }
 
+.new-goal-group * {
+    border-color: rgba(33, 146, 255, 0.5);
+}
+
 .new-goal-group input:focus {
     box-shadow: none;
+    border-color: rgba(33, 146, 255, 1);
+}
+
+.new-goal-group .btn-primary {
+    background-color: rgb(33, 146, 255);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+.new-goal-group .btn-outline-primary {
+    background-color: rgb(255, 255, 255);
+    color: rgb(33, 146, 255);
+    font-weight: bold;
+    border-color: rgba(33, 146, 255, 0.75);
 }
 </style>

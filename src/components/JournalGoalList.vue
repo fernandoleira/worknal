@@ -78,5 +78,7 @@ export default {
 </script>
 
 <style>
-
+#goals {
+    position: relative;
+}
 </style>
