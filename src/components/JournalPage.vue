@@ -73,6 +73,7 @@ export default {
             } catch (err) {
                 console.log("There has been an error: ", err);
             }
+            this.emitter.emit('new-goal-added');
         },
         async updateEntry(entryId, entryData, inx) {
             try {
