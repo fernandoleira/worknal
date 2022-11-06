@@ -15,7 +15,7 @@ func main() {
 	app.OnBeforeServe().Add(func(ev *core.ServeEvent) error {
 		ev.Router.AddRoute(echo.Route{
 			Method: http.MethodGet,
-			Path:   "/api/v1/",
+			Path:   "/api/v1",
 			Handler: func(ctx echo.Context) error {
 				return ctx.String(200, "worknal")
 			},

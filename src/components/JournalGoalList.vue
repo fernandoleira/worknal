@@ -2,15 +2,15 @@
     <div id="goals" class="panel h-100">
         <h3>Goals</h3>
         <JournalGoal v-for="(goal, inx) in goals" :key="inx" :inx="inx" :goal="goal"
-            @toogle-goal="goal => toggleGoalCompleted(goal.id, goal.completed)"
-            @delete-goal="goal => deleteGoal(goal.id, goal.inx)" />
-        <JournalNewGoal @new-goal-created="newGoal => createGoal(newGoal)" />
+            @toggle-goal="goal => toggleGoalCompleted(goal.id, goal.completed)"
+            @delete-goal="goal => deleteGoal(goal.id, inx)" />
+        <JournalNewGoal @new-goal-created="newGoalData => createGoal(newGoalData)" />
     </div>
 </template>
 
 <script>
-import { db } from '../plugins/firebase';
-import { collection, doc, getDocs, addDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite';
+//import { db } from '../plugins/firebase';
+import { db } from '../plugins/pocketbase';
 
 import JournalGoal from './JournalGoal.vue';
 import JournalNewGoal from './JournalNewGoal.vue';
@@ -24,42 +24,37 @@ export default {
     methods: {
         // Read all the goals stored in firestore for the user
         async getGoals() {
-            const goalsCol = collection(db, 'users/fernandoleira/goals');
-            const goalsSnaps = await getDocs(goalsCol);
-            this.goals = goalsSnaps.docs.map(doc => {
-                return {
-                    id: doc.id,
-                    data: doc.data()
-                }
-            });
+            try{
+                this.goals = await db.records.getFullList('goals', 200, {
+                    sort: 'created'
+                });
+            } catch (err) {
+                console.log("There has been an error: ", err);
+            }
         },
         // Create a new Journal Goal and push it to firestore
-        async createGoal(newGoal) {
+        async createGoal(newGoalData) {
             try {
-                const newGoalRef = await addDoc(collection(db, 'users/fernandoleira/goals'), newGoal);
-                const newGoalObj = {
-                    id: newGoalRef.id,
-                    data: newGoal,
-                }
-                this.goals.push(newGoalObj);
+                const newGoal = await db.records.create('goals', newGoalData);
+                this.goals.push(newGoal);
             } catch (err) {
                 console.log("There has been an error: ", err);
             }
         },
         // Delete a Journal Goal
-        async deleteGoal(goalId, inx) {
+        async deleteGoal(id, inx) {
             try {
-                await deleteDoc(doc(db, 'users/fernandoleira/goals/', goalId));
+                await db.records.delete('goals', id);
                 this.goals.splice(inx, 1)
             } catch (err) {
                 console.log("There has been an error: ", err);
             }
         },
         // Modify the completed state in the database when checkmark is active/inactive in the GUI
-        async toggleGoalCompleted(goalId, completedNewState) {
+        async toggleGoalCompleted(id, newState) {
             try {
-                await updateDoc(doc(db, 'users/fernandoleira/goals/', goalId), {
-                    completed: completedNewState,
+                await db.records.update('goals', id, {
+                    completed: newState,
                 });
             } catch (err) {
                 console.log("There has been an error: ", err);

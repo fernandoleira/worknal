@@ -4,7 +4,7 @@
             <input class="form-check-input mt-0" type="checkbox" v-model="this.completed" :id="inx"
                 @change="eventToggleGoalCompleted(goal.id)" />
         </div>
-        <span class="input-group-text col"><div :class="{strikethrough: this.completed}">{{ goal.data.title }}</div></span>
+        <span class="input-group-text col"><div :class="{strikethrough: this.completed}">{{ goal.title }}</div></span>
         <button class="btn btn-outline-secondary dropdown" type="button" data-bs-toggle="dropdown"
             aria-expanded="false"><i class="fa fa-ellipsis-h"></i></button>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -25,7 +25,7 @@ export default {
     },
     methods: {
         eventToggleGoalCompleted(id) {
-            this.$emit('toogle-goal', {id: id, completed: this.completed});
+            this.$emit('toggle-goal', {id: id, completed: this.completed});
         },
         eventDeleteGoal(id, inx) {
             this.$emit('delete-goal', {id: id, inx: inx});
@@ -37,7 +37,7 @@ export default {
         }
     },
     mounted() {
-        this.completed = this.goal.data.completed;
+        this.completed = this.goal.completed;
     }
 }
 </script>
