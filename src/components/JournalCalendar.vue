@@ -1,33 +1,35 @@
 <template>
     <div id="calendar" class="panel">
-        <v-date-picker is-expanded v-model="selectedDate" :attributes='attrs'  
-        :select-attribute="selectedAttr" />
+        <v-date-picker is-expanded v-model="selectedDate" :attributes='attrs' :select-attribute="selectedAttr" />
     </div>
 </template>
 
 <script>
-import { db } from '../plugins/firebase';
-import { collection, getDocs } from 'firebase/firestore/lite';
+import { db } from '../plugins/pocketbase';
 
 export default {
     name: 'JournalCalendar',
     methods: {
         async getPageDates() {
-            const pageRef = collection(db, '/users/fernandoleira/pages');
-            const pageSnaps = await getDocs(pageRef);
-            return pageSnaps.docs.map(doc => {
-                if (doc.id !== "debug") {
-                    return new Date(doc.id.substring(2, 4) + '/' + doc.id.substring(0, 2) + '/' + doc.id.substring(4, 8));
+            const pageVals = await db.records.getFullList('pages', 200, {
+                '$autoCancel': false
+            });
+
+            return pageVals.map(page => {
+                if (page.date !== "debug") {
+                    return new Date(page.date.substring(2, 4) + '/' + page.date.substring(0, 2) + '/' + page.date.substring(4, 8));
                 }
-            }).filter(doc => doc !== undefined);
+            }).filter(page => page !== undefined);
         },
     },
     watch: {
         selectedDate(date) {
-            this.emitter.emit('new-date-selected', {
-                date: date, 
-                hasEntries: this.datesWithEntries.has(date.toDateString())
-            });
+            if (date != null) {
+                this.emitter.emit('new-date-selected', {
+                    date: date,
+                    hasEntries: this.datesWithEntries.has(date.toDateString())
+                });
+            }
         }
     },
     data() {
@@ -51,13 +53,13 @@ export default {
             datesWithEntries: new Map()
         }
     },
-    created() {
-        this.getPageDates().then(value => {
-            value.forEach(date => {
+    async created() {
+        try {
+            const pageDates = await this.getPageDates();
+            pageDates.forEach(date => {
                 // Add date into datesWithEntries object so it can be use
                 // later to check if there are entries with this date.
                 this.datesWithEntries.set(date.toDateString(), true);
-
                 if (date.toDateString() !== this.todayDate.toDateString()) {
                     // Push a new style attribute for this date
                     this.attrs.push(
@@ -71,11 +73,10 @@ export default {
                         }
                     )
                 }
-            })
-        })
-        .catch(err => {
+            });
+        } catch (err) {
             console.log("There has been an error: ", err);
-        });
+        }
     }
 }
 </script>

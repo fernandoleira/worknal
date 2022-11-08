@@ -1,26 +1,34 @@
 # Worknal
 
-Web app to keep track of important daily entries and goals.
+Web app to keep track of important daily jornal entries and goals.
 
 ## Getting Started
 
+### Frontend client
+
 ```bash
-# Project setup
-npm install
+# Open the project directory.
+$ cd worknal
 
-# Compiles and hot-reloads for development
-npm run serve
+# Install the required dependencies.
+$ npm install
 
-# Compiles and minifies for production
-npm run build
-
-# Lints and fixes files
-npm run lint
+# Run the client.
+$ npm run serve
 ```
 
-## Customize configuration
+### Backend Server
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```bash
+# Open the backend service directory.
+$ cd worknal/services/backend
+
+# Build the project with Go.
+$ go build -o pocketbase main.go
+
+# Run the server.
+$ ./pocketbase serve
+```
 
 ## License
 
