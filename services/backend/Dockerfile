@@ -1,15 +1,35 @@
-FROM golang:1.16-alpine
+# syntax=docker/dockerfile:1
 
-WORKDIR /app
+#
+# BUILD
+#
 
+# Pull golang image to build binary
+FROM golang:1.19 AS build
+
+# Set the working directory in /build
+WORKDIR /build
+
+# Copy all the files from the backend service folder
 COPY ./ ./
 
-RUN go mod download
+# Download and verify mod and build pocketbase
+RUN go mod download && go mod verify
+RUN go build -v -o pocketbase .
 
-RUN go build -o /pocketbase
+#
+# DEPLOY
+#
 
-EXPOSE 8090
+# Pull ubuntu image to run backend
+FROM ubuntu:latest
 
-ENTRYPOINT ["./pocketbase"]
+# Set the working directory in /build
+WORKDIR /app
 
-CMD ["serve"]
+# Copy the pocketbase binary from the build image
+COPY --from=build /build/pocketbase /app
+
+# Expose the port to tcp and run serve cmd
+EXPOSE 8090/tcp
+CMD ["./pocketbase", "serve", "--http", "0.0.0.0:8090"]

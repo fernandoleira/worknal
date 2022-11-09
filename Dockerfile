@@ -20,4 +20,4 @@ EXPOSE 8080/tcp
 ENTRYPOINT ["serve"]
 
 # Run production app build.
-CMD ["-s", "dist", "-p", "8080"]
+CMD ["-s", "dist", "-p", "8080", "-n"]
