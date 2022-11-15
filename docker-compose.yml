@@ -1,0 +1,19 @@
+# Docker-Compose file for worknal
+version: '3.7'
+
+services:
+  client:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - server
+  
+  server:
+    build:
+      context: ./services/backend/
+      dockerfile: Dockerfile
+    ports:
+      - 8090:8090
