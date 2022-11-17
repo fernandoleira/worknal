@@ -46,3 +46,4 @@ go.work
 
 # PocketBase files
 pb_data/
+pb_schema.json

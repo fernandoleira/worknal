@@ -29,7 +29,7 @@ WORKDIR /app
 
 # Copy the pocketbase binary from the build image
 COPY --from=build /build/pocketbase /app
-COPY /pb_data /app
+COPY /pb_data /app/pb_data
 
 # Expose the port to tcp and run serve cmd
 EXPOSE 8090/tcp
